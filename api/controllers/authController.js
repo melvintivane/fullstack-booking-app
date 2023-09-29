@@ -1,7 +1,9 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import { createError } from "../utils/error.js";
+import jwt from "jsonwebtoken";
 
+//Register
 export const register = async (req, res, next) => {
   try {
     const salt = bcrypt.genSaltSync(10);
@@ -23,6 +25,7 @@ export const register = async (req, res, next) => {
   }
 };
 
+//Login
 export const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ username: req.body.username });
@@ -35,9 +38,20 @@ export const login = async (req, res, next) => {
 
     if (!isPasswordCorrect) return res.status(400).send("Wrong Password or Username.");
 
-    const {password, isAdmin, ...otherDetails} = user._doc;
 
-    return res.status(200).json({...otherDetails});
+    const token = jwt.sign( //inside sign you can whatever info you want
+      {
+        id: user._id,
+        isAdmin: user.isAdmin,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "3m" }
+    );
+
+
+    const { password, isAdmin, ...otherDetails } = user._doc;
+
+    return res.cookie("access_token", token, {httpOnly: true}).status(200).json({ ...otherDetails });
   } catch (error) {
     next(error);
   }
