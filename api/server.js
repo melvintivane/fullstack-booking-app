@@ -1,6 +1,7 @@
 import express, { json } from "express";
 import mongoose from "mongoose";
 import { config } from "dotenv";
+import cookieParser from "cookie-parser";
 import authRoute from "./routes/auth.js";
 import usersRoute from "./routes/users.js";
 import hotelsRoute from "./routes/hotels.js";
@@ -20,7 +21,9 @@ const connect = async () => {
 
 //middlewares
 
-app.use(express.json()); //sem este middleware a aplicação não aceitará JSON 
+app.use(cookieParser());
+
+app.use(express.json()); //sem este middleware a aplicação não aceitará JSON
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", usersRoute);
