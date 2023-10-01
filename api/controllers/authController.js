@@ -38,16 +38,14 @@ export const login = async (req, res, next) => {
 
     if (!isPasswordCorrect) return res.status(400).send("Wrong Password or Username.");
 
-
-    const token = jwt.sign( //inside sign you can whatever info you want
+    const token = jwt.sign( //inside sign you can add whatever info you want
       {
         id: user._id,
         isAdmin: user.isAdmin,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "3m" }
+      { expiresIn: "30m" }
     );
-
 
     const { password, isAdmin, ...otherDetails } = user._doc;
 
