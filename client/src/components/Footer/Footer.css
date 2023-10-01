@@ -1,0 +1,33 @@
+.footer {
+    width: 100%;
+    padding:50px 0px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: rgba(219, 219, 219, 0.363);
+}
+
+.footerLists {
+    width: 1024px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 50px;
+}
+
+.footerList {
+    list-style: none;
+    padding: 0;
+}
+
+.footerListItem {
+    margin-bottom: 10px;
+    color: rgb(22, 22, 22);
+    cursor: pointer;
+}
+
+.footerText {
+    font-weight: 600;
+    color: #003b95;
+}
