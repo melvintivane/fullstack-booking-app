@@ -26,6 +26,7 @@
 
 .featuredPropertyCity{
     font-weight: 300;
+    text-transform: capitalize;
 }
 
 .featuredPropertyPrice{

@@ -22,6 +22,7 @@
 .propertyListTitles > h1 {
     font-size: 18px;
     color: #444;
+    text-transform: capitalize;
 }
 
 .propertyListTitles > h2 {
