@@ -21,11 +21,26 @@ export const getHotel = async (req, res, next) => {
 };
 
 export const getHotels = async (req, res, next) => {
+  const { min, max, ...others } = req.query;
+
+  const query = {};
+
+  //converter o objeto others em uma matriz de pares chave-valor. Em seguida, mapeamos essa matriz em um array de objetos com a estrutura { chave: valor }
+  if (Object.keys(others).length > 0) {
+    query.$and = Object.entries(others).map(([key, value]) => ({
+      [key]: value,
+    }));
+  }
+
+  if (min && max) {
+    query.cheapestPrice = { $gte: min, $lte: max };
+  }
+
   try {
-    const hotels = await Hotel.find();
+    const hotels = await Hotel.find(query);
     res.status(200).json(hotels);
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 };
 
@@ -38,24 +53,29 @@ export const countByCity = async (req, res, next) => {
       })
     );
 
-    res.status(200).json(list)
+    res.status(200).json(list);
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 export const countByType = async (req, res, next) => {
   try {
-    const cities = req.query.type.split(",");
-    const list = await Promise.all(
-      cities.map((type) => {
-        return Hotel.countDocuments({ type: type });
-      })
-    );
+    const hotelCount = await Hotel.countDocuments({ type: "hotel" });
+    const apartmentCount = await Hotel.countDocuments({ type: "apartment" });
+    const resortCount = await Hotel.countDocuments({ type: "resort" });
+    const villaCount = await Hotel.countDocuments({ type: "villa" });
+    const cabinCount = await Hotel.countDocuments({ type: "cabin" });
 
-    res.status(200).json(list)
+    res.status(200).json([
+      { type: "hotel", count: hotelCount },
+      { type: "apartment", count: apartmentCount },
+      { type: "resort", count: resortCount },
+      { type: "villa", count: villaCount },
+      { type: "cabin", count: cabinCount },
+    ]);
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
