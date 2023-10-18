@@ -12,14 +12,16 @@ import useFetch from "../../hooks/useFetch.js";
 const List = () => {
   const location = useLocation();
   const [destination, setDestination] = useState(location.state.destination);
-  const [date, setDate] = useState(location.state.date);
+  const [dates, setDates] = useState(location.state.dates);
   const [options, setOptions] = useState(location.state.options);
   const [openDate, setOpenDate] = useState(false);
   const [min, setMin] = useState(undefined);
   const [max, setMax] = useState(undefined);
 
   const { data, loading, error, reFetch } = useFetch(
-    `http://localhost:8080/api/hotels?city=${destination}&min=${min || 0}&max=${max || 100000}`
+    `http://localhost:8080/api/hotels?city=${destination}&min=${min || 0}&max=${
+      max || 100000
+    }`
   );
 
   const handleClick = () => {
@@ -40,15 +42,19 @@ const List = () => {
             </div>
             <div className="lsItem">
               <label>Check-in Date</label>
-              <span onClick={() => setOpenDate(!openDate)}>{`${format(
-                date[0].startDate,
-                "MM/dd/yyyy"
-              )} to ${format(date[0].endDate, "MM/dd/yyyy")}`}</span>
+              <span onClick={() => setOpenDate(!openDate)}>
+                {dates &&
+                  dates.length > 0 &&
+                  `${format(dates[0].startDate, "dd/MM/yyyy")} to ${format(
+                    dates[0].endDate,
+                    "dd/MM/yyyy"
+                  )}`}
+              </span>
               {openDate && (
                 <DateRange
-                  onChange={(item) => setDate([item.selection])}
+                  onChange={(item) => setDates([item.selection])}
                   minDate={new Date()}
-                  ranges={date}
+                  ranges={dates}
                 />
               )}
             </div>
@@ -59,13 +65,21 @@ const List = () => {
                   <span className="lsOptionText">
                     Min price <small>per night</small>
                   </span>
-                  <input onChange={(e)=> setMin(e.target.value)} type="number" className="lsOptionInput" />
+                  <input
+                    onChange={(e) => setMin(e.target.value)}
+                    type="number"
+                    className="lsOptionInput"
+                  />
                 </div>
                 <div className="lsOptionItem">
                   <span className="lsOptionText">
                     Max price <small>per night</small>
                   </span>
-                  <input onChange={(e)=> setMax(e.target.value)} type="number" className="lsOptionInput" />
+                  <input
+                    onChange={(e) => setMax(e.target.value)}
+                    type="number"
+                    className="lsOptionInput"
+                  />
                 </div>
                 <div className="lsOptionItem">
                   <span className="lsOptionText">Adult</span>
