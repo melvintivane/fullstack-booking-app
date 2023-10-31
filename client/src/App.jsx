@@ -12,6 +12,7 @@ import Hotel from "./pages/Hotel/Hotel";
 import List from "./pages/List/List";
 import Header from "./components/Header/Header";
 import Attractions from "./pages/Attractions/Attractions";
+import Login from "./pages/login/Login";
 
 
 const Layout = () => {
@@ -46,10 +47,10 @@ const router = createBrowserRouter([
       },
     ],
   },
-  // {
-  //   path: "/login",
-  //   element: <Login />,
-  // },
+  {
+    path: "/login",
+    element: <Login />,
+  },
   // {
   //   path: "/register",
   //   element: <Register />,
